@@ -2,6 +2,21 @@ sudo: required
 services: 
   - docker
 
+env: 
+  global:
+    - REGISTRY_USER=monicaxrao
+    - secure: "Mtr5XQk7y6/EuH9WpqTB4BiS9r3KUU9A4tVVbBYfDF4W9T0OcgW+YN7OFCLeE8baWbbCG0J8gqKq1O8vvV7BwQOsxCn+R+les3Jq1I6dGKwQ1Y7/KDQGYrdcNVPjBMJJZl9c2Lkz04o0HikHiNyWjW4vNbs44Nf1Cejnb9PRi//EbJm+wy8KPqYKQWUowwrP74kA5aZ1H5uHopCvZcsCtD8MNByttH4y3PmWTq/bmak8QMeS3rflZKUQW1ubDkVGhQMnw/UQh1tiOqejnZs5PduARDt1aHduqvTeRa0fGFSWOz7A5gn1lzCEwUasmpetMZKBLBsjAp/H8G1QfCcjJW+I0S6cnfWoJyeqAFG10JUOAMVMIMU4FyD15peWrST0+5XK5whMzThxifiiJC4XJVZveD0tEBfgKRGEYcV7z+LO2y/EX1Ly2KLDuElP6OLfflO7Yp5066wTFCas/zGszM8zKVjmaxl8P8s20kh+j015RvjW/1KUfwtYayR9IGkfRyhtMtFHTUcUxGb88n/SvH0KQwIFG+E1C/CbxFj5iczCim//SO3yqFIG7RXN5J3p2TKEaGMDMCqItk02O49V376gJvsp/3SiuX8Zjypmns20gf00AWv7ut5M6BbdzrHJ3dQ9LOqA60N+zA0YGG0/akFgZ/eShdx+0whNwHysHs8="
+
 script:
   - docker build -t monicaxrao/node .
   - docker images monicaxrao/node
+
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+
+deploy:
+  provider: script
+  script: docker push monicaxrao/node
+  on:
+    branch: master
+  
